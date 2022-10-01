@@ -19,6 +19,8 @@ import operator
 main_path = "./data/*"
 name_fits = str
 hog_img = str
+n_log = int
+n_hog = int
 
 #empty array list
 log_list=[]
@@ -57,6 +59,16 @@ def norm(log_img):
     normalized_array_log_image = log_img / norm
     return normalized_array_log_image
 
+def fits_log(n_log):
+    hdu = fits.PrimaryHDU(norm_log_list[n_log])
+    hdul = fits.HDUList([hdu])
+    hdul.writeto('./log-img-fits/' + str(n_log) + '_i_log.fits')
+
+def fits_hog(n_hog):
+    hdu = fits.PrimaryHDU(norm_log_list[n_hog])
+    hdul = fits.HDUList([hdu])
+    hdul.writeto('./hog-img-fits/' + str(n_hog) + '_i_hog.fits')
+
 #loops
 for i in glob.glob(main_path):
   log(i)
@@ -78,11 +90,17 @@ for i in range(len(crop_log_list and crop_hog_list)):
   norm_log_list.append(norm_log_array)
   norm_hog_list.append(norm_hog_array)
 
-for i in range(len(norm_hog_list)):
+for i in range(len(norm_hog_list and norm_hog_list)):
   plt.imshow(norm_log_list[i], cmap='gray')
   plt.show()
   plt.imshow(norm_hog_list[i], cmap='gray')
   plt.show()
+
+img_number = 0
+for i in range(len(norm_log_list and norm_hog_list)):
+  fits_log(i)
+  fits_hog(i)
+  img_number += 1
 
 
 
